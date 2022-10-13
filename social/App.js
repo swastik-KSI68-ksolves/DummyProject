@@ -13,7 +13,7 @@ const App = () => {
   useEffect(() => {
     setTimeout(() => {
       setVisible(false)
-    }, 2000);
+    }, 4600);
   })
 
 
