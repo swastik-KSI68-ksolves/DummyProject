@@ -3,6 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import Colors from '../Constants/Colors';
 import WelcomeSvg from "../assets/images/SVGImages/WELCOME4img.svg"
 import PrimaryButton from "../Components/PrimaryButton"
+import { H1, H6 } from '../Components/UI/Heading';
 
 const WelcomeScreen = ({ navigation }) => {
     return (
@@ -11,8 +12,8 @@ const WelcomeScreen = ({ navigation }) => {
                 <WelcomeSvg width={350} height={350} />
             </View>
             <View style={styles.TextData}>
-                <Text style={styles.WelcomeText}>Welcome</Text>
-                <Text style={styles.WelcomeTextSmall}>Become a part of our community..</Text>
+                <H1 style={styles.WelcomeText}>Hello</H1>
+                <H6 style={styles.WelcomeTextSmall}>Become a part of our community..</H6>
             </View>
             <View style={styles.ButtonData}>
                 <PrimaryButton
