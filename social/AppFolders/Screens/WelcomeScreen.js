@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import Colors from '../Constants/Colors';
 import WelcomeSvg from "../assets/images/SVGImages/WELCOME4img.svg"
 import PrimaryButton from "../Components/PrimaryButton"
-import { H1, H6 } from '../Components/UI/Heading';
+import { H1, H5, H6 } from '../Components/UI/Heading';
 
 const WelcomeScreen = ({ navigation }) => {
     return (
@@ -68,13 +68,12 @@ const styles = StyleSheet.create({
     },
     WelcomeText: {
         fontFamily: "Merienda-Bold",
-        fontSize: 50,
         color: Colors.color1
     },
     WelcomeTextSmall: {
         fontFamily: "RobotoCondensed-Regular",
-        fontSize: 20,
-        color: Colors.color2
+        color: Colors.color2,
+        fontStyle: "italic",
     }
 
 })

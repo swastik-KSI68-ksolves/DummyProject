@@ -1,20 +1,25 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Text, TextInput, SafeAreaView, KeyboardAvoidingView, ScrollViewBase, ScrollView } from 'react-native'
+import { View, StyleSheet, Text, TextInput, SafeAreaView, KeyboardAvoidingView, Dimensions } from 'react-native'
 import Colors from "../../Constants/Colors"
 import LoginImage from "../../assets/images/SVGImages/LoginGirl.svg"
 import { head1, head2, button1 } from "../../CommonStyling/Common"
 import PrimaryButton from '../../Components/PrimaryButton'
 
 const Login = ({ navigation }) => {
-    const [showHideImg, toggleshowHideImg] = useState(1)
+
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
+    const [showHideImg, toggleshowHideImg] = useState(1);
+    console.debug(windowHeight);
+    console.debug(windowWidth);
     return (
         <SafeAreaView style={styles.container}>
             {showHideImg ? <View style={styles.imageHolder}>
-                <LoginImage width={300} height={300} />
+                <LoginImage width={windowWidth * 0.8} height={windowHeight * 0.4} />
             </View> : null}
             <KeyboardAvoidingView
                 behavior='height'
-                // keyboardVerticalOffset={80}
+            // keyboardVerticalOffset={80}
             >
                 <View style={styles.s2}>
                     <Text style={head1}>Login</Text>

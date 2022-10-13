@@ -63,24 +63,21 @@ export const H6 = ({ children, style }) => {
 
 const styles = StyleSheet.create({
     h1: {
-        fontSize: 56,
-    },
-    h2: {
         fontSize: 48,
     },
+    h2: {
+        fontSize: 42,
+    },
     h3: {
-        fontSize: 40,
+        fontSize: 36,
     },
     h4: {
-        fontSize: 32,
+        fontSize: 30,
     },
     h5: {
         fontSize: 24,
     },
     h6: {
-        fontSize: 16,
+        fontSize: 18,
     },
-    h7: {
-        fontSize: 12,
-    }
 })
