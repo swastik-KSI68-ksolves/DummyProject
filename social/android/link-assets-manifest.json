@@ -1,0 +1,29 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "AppFolders/assets/fonts/Merienda-Bold.ttf",
+      "sha1": "ef31c7c8bf7a3817dd1b3d5e0ca0ec1ba5ceba1f"
+    },
+    {
+      "path": "AppFolders/assets/fonts/Merienda-Regular.ttf",
+      "sha1": "69f1b584e429f9085c01666287a1a7a0efbfd960"
+    },
+    {
+      "path": "AppFolders/assets/fonts/PTSerif-Bold.ttf",
+      "sha1": "581675fd5d3734c5ee1506359190ce467c477e18"
+    },
+    {
+      "path": "AppFolders/assets/fonts/PTSerif-Regular.ttf",
+      "sha1": "9ea0ea4d9ed8fda292db458366dbd9af013eced7"
+    },
+    {
+      "path": "AppFolders/assets/fonts/RobotoCondensed-Bold.ttf",
+      "sha1": "15e8faa21a00eb5b40d3837e16960a39d78fe45c"
+    },
+    {
+      "path": "AppFolders/assets/fonts/RobotoCondensed-Regular.ttf",
+      "sha1": "e0d7acf2ca3dd0ff68f533797bb94b0580397e95"
+    }
+  ]
+}
