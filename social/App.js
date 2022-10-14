@@ -8,19 +8,21 @@ import SplashScreen from './AppFolders/Components/SplashScreen';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [isVisible, setVisible] = useState(true);
+  const [isVisible, setVisible] = useState(true);     // isVisible - if true show splash screen
 
-  useEffect(() => {
-    setTimeout(() => {
+  useEffect(() => {                         // show splash screen for some time 
+    const timer = setTimeout(() => {
       setVisible(false)
     }, 4600);
-  })
+    return () => clearTimeout(timer);
+  }, [])
 
 
-  if (isVisible)
-    return (<SplashScreen />)
 
-  if (!isVisible)
+  // if (isVisible)
+  //   return (<SplashScreen />)
+
+  // if (!isVisible)
     return (
       <NavigationContainer>
         <Stack.Navigator>

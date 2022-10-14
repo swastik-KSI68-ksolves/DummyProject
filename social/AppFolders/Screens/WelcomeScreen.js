@@ -1,15 +1,17 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import Colors from '../Constants/Colors';
 import WelcomeSvg from "../assets/images/SVGImages/WELCOME4img.svg"
 import PrimaryButton from "../Components/PrimaryButton"
 import { H1, H5, H6 } from '../Components/UI/Heading';
 
 const WelcomeScreen = ({ navigation }) => {
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
     return (
         <View style={styles.container}>
             <View style={styles.imageHolder}>
-                <WelcomeSvg width={350} height={350} />
+                <WelcomeSvg width={windowWidth * 0.8} height={windowHeight * 0.4} />
             </View>
             <View style={styles.TextData}>
                 <H1 style={styles.WelcomeText}>Hello</H1>

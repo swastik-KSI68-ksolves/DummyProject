@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { View, StyleSheet, Text, TextInput, SafeAreaView, KeyboardAvoidingView, Dimensions, Animated, Easing } from 'react-native'
+import { View, StyleSheet, Text, TextInput, SafeAreaView, KeyboardAvoidingView, Dimensions, Animated } from 'react-native'
 import Colors from "../../Constants/Colors"
 import LoginImage from "../../assets/images/SVGImages/LoginGirl.svg"
 import { head1, head2, button1 } from "../../CommonStyling/Common"
@@ -11,42 +11,19 @@ const Login = ({ navigation }) => {
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
     const fadeAnim = useRef(new Animated.Value(0)).current;
-    const fadeAnimForm = useRef(new Animated.Value(0)).current;
-    const translation = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
-
 
     const fadeIn = () => {
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 500,
+            duration: 3500,
             useNativeDriver: false,
         }).start();
-    };
-
-    const fadeInaForm = () => {
-        Animated.sequence([
-            Animated.spring(translation.y, {
-                toValue: -1000,
-                useNativeDriver: true,
-            }),
-            Animated.spring(translation.y, {
-                toValue: 10,
-                useNativeDriver: true,
-            }),
-        ]).start();
     };
 
     const fadeOut = () => {
         Animated.timing(fadeAnim, {
             toValue: 0,
-            // duration: 1000,
-            useNativeDriver: false,
-        }).start();
-    };
-
-    const fadeOutaForm = () => {
-        Animated.timing(fadeAnimForm, {
-            toValue: 0,
+            duration: 1000,
             useNativeDriver: false,
         }).start();
     };
@@ -90,16 +67,17 @@ const Login = ({ navigation }) => {
     }
 
     useEffect(() => {
-        fadeInaForm();
         if (showHideImg) {
-            setTimeout(() => {
-                fadeIn();
-            }, 500);
+            fadeIn();
         }
-
+        // setTimeout(() => fadeIn(), 100);
     })
 
-
+    useEffect(() => {
+        if (!showHideImg) {
+            fadeOut();
+        }
+    })
 
 
 
@@ -117,25 +95,7 @@ const Login = ({ navigation }) => {
             <KeyboardAvoidingView
                 behavior='height'
             >
-
-
-                <Animated.View
-                    style={{
-                        display: "flex",
-                        zIndex: -1,
-                        width: "100%",
-                        height: "60%",
-                        borderTopLeftRadius: 30,
-                        borderTopRightRadius: 30,
-                        padding: 20,
-                        paddingTop: 10,
-                        transform: [
-                            { translateX: translation.x },
-                            { translateY: translation.y },
-                        ]
-                        // transform: [{ translateY: fadeAnimForm }],
-                    }}
-                >
+                <View style={styles.s2}>
                     <Text style={head1}>Login</Text>
                     {emailValidError ? <Text style={[head2, { color: "red" }]}>{emailValidError}</Text> :
                         passwordValidError ? <Text style={[head2, styles.passwordMsg]}> {passwordValidError} </Text> :
@@ -193,9 +153,7 @@ const Login = ({ navigation }) => {
                                 Create a new account
                             </Text></Text>
                     </View>
-                </Animated.View>
-
-
+                </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
     )
