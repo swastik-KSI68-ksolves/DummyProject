@@ -9,46 +9,45 @@ const Register = ({ navigation }) => {
     //calculating screen width and height
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
-    const fadeAnim = useRef(new Animated.Value(0)).current;
-    const fadeAnimForm = useRef(new Animated.Value(0)).current;
-    const translation = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
 
+    // Animated image and form using this
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const translation = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
 
     const fadeIn = () => {
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 500,
+            duration: 2000,
             useNativeDriver: false,
         }).start();
     };
 
-    const fadeInaForm = () => {
-        Animated.sequence([
-            Animated.spring(translation.y, {
-                toValue: -1000,
-                useNativeDriver: true,
-            }),
-            Animated.spring(translation.y, {
-                toValue: 10,
-                useNativeDriver: true,
-            }),
-        ]).start();
-    };
 
     const fadeOut = () => {
         Animated.timing(fadeAnim, {
             toValue: 0,
-            // duration: 1000,
+            duration: 1300,
             useNativeDriver: false,
         }).start();
     };
 
-    const fadeOutaForm = () => {
-        Animated.timing(fadeAnimForm, {
-            toValue: 0,
-            useNativeDriver: false,
+
+    const fadeInaForm = () => {
+        Animated.timing(translation.y, {
+            toValue: -100,
+            duration: 1800,
+            useNativeDriver: true,
         }).start();
     };
+
+    const makeformNormal = () => {
+        const fadeInaForm = () => {
+            Animated.timing(translation.y, {
+                toValue: 20,
+                useNativeDriver: true,
+            }).start();
+        };
+    }
 
 
     const [showHideImg, toggleshowHideImg] = useState(1);
@@ -89,100 +88,110 @@ const Register = ({ navigation }) => {
     }
 
     useEffect(() => {
-        fadeInaForm();
-        if (showHideImg) {
-            setTimeout(() => {
-                fadeIn();
-            }, 500);
-        }
-
+        fadeIn();
     })
 
 
     return (
         <SafeAreaView style={styles.container}>
-            {showHideImg ?
-                <Animated.View
-                    style={
-                        [styles.imageHolder, { opacity: fadeAnim }]
-                    }
-                >
-                    <RegisterImage width={windowWidth * 0.6} height={windowHeight * 0.4} />
-                </Animated.View>
-                : null}
-            <KeyboardAvoidingView
-                behavior='height'
+            <Animated.View
+                style={
+                    [styles.imageHolder, { opacity: fadeAnim }]
+                }
             >
-                <Animated.View
-                    style={{
-                        display: "flex",
-                        zIndex: -1,
-                        width: "100%",
-                        height: "45%",
-                        paddingHorizontal: 20,
-                        marginTop: 10,
-                        transform: [
-                            { translateX: translation.x },
-                            { translateY: translation.y },
-                        ]
-                    }}
-                >
-                    <Text style={head1}>Create a new account</Text>
-                    <Text style={styles.link2}>Already registered?&nbsp;
-                        <Text style={styles.link}
-                            onPress={() => navigation.navigate('login')}
-                        >
-                            Login here
-                        </Text>
+                <RegisterImage width={windowWidth * 0.6} height={windowHeight * 0.4} />
+            </Animated.View>
+            <Animated.ScrollView
+                style={{
+                    flex: 1,
+                    display: "flex",
+                    // zIndex: -1,
+                    minWidth: "100%",
+                    maxHeight: "60%",
+                    paddingHorizontal: 20,
+                    marginTop: 10,
+                    transform: [
+                        { translateX: translation.x },
+                        { translateY: translation.y },
+                    ]
+                }}
+            >
+                <Text style={head1}>Create a new account</Text>
+                <Text style={styles.link2}>Already registered?&nbsp;
+                    <Text style={styles.link}
+                        onPress={() => navigation.navigate('login')}
+                    >
+                        Login here
                     </Text>
-                    {emailValidError ? <Text style={[head2, { color: "red" }]}>{emailValidError}</Text> :
-                        passwordValidError ? <Text style={[head2, styles.passwordMsg]}> {passwordValidError} </Text> :
-                            null}
+                </Text>
+                {emailValidError ? <Text style={[head2, { color: "red" }]}>{emailValidError}</Text> :
+                    passwordValidError ? <Text style={[head2, styles.passwordMsg]}> {passwordValidError} </Text> :
+                        null}
 
-                    <View style={styles.formgroup}>
-                        <Text style={styles.label}>Name</Text>
-                        <TextInput style={styles.input}
-                            placeholder="Enter your Name"
-                            placeholderTextColor={Colors.color3}
-                            onFocus={() => toggleshowHideImg(!showHideImg)}     //image will be hidden 
-                            onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown
-                        />
-                    </View>
-                    <View style={styles.formgroup}>
-                        <Text style={styles.label}>Email</Text>
-                        <TextInput style={styles.input}
-                            placeholder="Enter your Email"
-                            placeholderTextColor={Colors.color3}
-                            onFocus={() => toggleshowHideImg(!showHideImg)}     //image will be hidden 
-                            onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown
-                        />
-                    </View>
-                    <View style={styles.formgroup}>
-                        <Text style={styles.label}>Password</Text>
-                        <TextInput style={styles.input} placeholder="Enter your password"
-                            placeholderTextColor={Colors.color3}
-                            secureTextEntry={true}
-                            onFocus={() => toggleshowHideImg(!showHideImg)}     //image will be hidden 
-                            onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown
+                <View style={styles.formgroup}>
+                    <Text style={styles.label}>Name</Text>
+                    <TextInput style={styles.input}
+                        placeholder="Enter your Name"
+                        placeholderTextColor={Colors.color3}
+                        onFocus={() => {
+                            fadeOut();
+                            setTimeout(() => {
+                                fadeInaForm();
+                            }, 500)
+                        }}    //image will be hidden 
+                    />
+                </View>
+                <View style={styles.formgroup}>
+                    <Text style={styles.label}>Email</Text>
+                    <TextInput style={styles.input}
+                        placeholder="Enter your Email"
+                        placeholderTextColor={Colors.color3}
+                        onFocus={() => {
+                            fadeOut();
+                            setTimeout(() => {
+                                fadeInaForm();
+                            }, 500)
+                        }}     //image will be hidden 
+                    />
+                </View>
+                <View style={styles.formgroup}>
+                    <Text style={styles.label}>Password</Text>
+                    <TextInput style={styles.input} placeholder="Enter your password"
+                        placeholderTextColor={Colors.color3}
+                        secureTextEntry={true}
+                        onFocus={() => {
+                            fadeOut();
+                            setTimeout(() => {
+                                fadeInaForm();
+                            }, 500)
+                        }}     //image will be hidden 
 
-                        />
-                    </View>
-                    <View style={styles.formgroup}>
-                        <Text style={styles.label}>Confirm password</Text>
-                        <TextInput style={styles.input}
-                            placeholderTextColor={Colors.color3}
-                            placeholder="Enter your password again"
-                            secureTextEntry={true}
-                            onFocus={() => toggleshowHideImg(!showHideImg)}     //image will be hidden 
-                            onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown
+                    />
+                </View>
+                <View style={styles.formgroup}>
+                    <Text style={styles.label}>Confirm password</Text>
+                    <TextInput style={styles.input}
+                        placeholderTextColor={Colors.color3}
+                        placeholder="Enter your password again"
+                        secureTextEntry={true}
+                        onFocus={() => {
+                            fadeOut();
+                            setTimeout(() => {
+                                fadeInaForm();
+                            }, 500)
+                        }}    //image will be hidden 
+                        onBlur={() => {
+                            fadeIn();
+                            makeformNormal();
 
-                        />
-                    </View>
-                    <PrimaryButton
-                        onPress={() => navigation.navigate('enterOtp')}
-                    >Register</PrimaryButton>
-                </Animated.View>
-            </KeyboardAvoidingView>
+                        }}    //image will be shown
+
+                    />
+                </View>
+                <PrimaryButton
+                    onPress={() => navigation.navigate('enterOtp')}
+                >Register</PrimaryButton>
+            </Animated.ScrollView>
         </SafeAreaView>
 
     )
@@ -195,21 +204,13 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.color4,
     },
     imageHolder: {
-        flex: 2,
+        flex: 1,
         maxHeight: "30%",
         maxWidth: "100%",
         alignItems: "center",
         justifyContent: "center",
-        padding: 15
-    },
-    s2: {
-        display: "flex",
-        // backgroundColor: "rgba(0,0,0,0.4)",
+        padding: 15,
         zIndex: -1,
-        width: "100%",
-        height: "70%",
-        paddingHorizontal: 20,
-        marginTop: 10,
     },
     formgroup: {
         display: "flex",

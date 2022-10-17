@@ -7,56 +7,58 @@ import PrimaryButton from '../../Components/PrimaryButton'
 
 const Login = ({ navigation }) => {
 
-    // calculating screen width and height
-    const windowWidth = Dimensions.get('window').width;
-    const windowHeight = Dimensions.get('window').height;
-    const fadeAnim = useRef(new Animated.Value(0)).current;
-    const fadeAnimForm = useRef(new Animated.Value(0)).current;
-    const translation = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
-
-
-    const fadeIn = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: false,
-        }).start();
-    };
-
-    const fadeInaForm = () => {
-        Animated.sequence([
-            Animated.spring(translation.y, {
-                toValue: -1000,
-                useNativeDriver: true,
-            }),
-            Animated.spring(translation.y, {
-                toValue: 10,
-                useNativeDriver: true,
-            }),
-        ]).start();
-    };
-
-    const fadeOut = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 0,
-            // duration: 1000,
-            useNativeDriver: false,
-        }).start();
-    };
-
-    const fadeOutaForm = () => {
-        Animated.timing(fadeAnimForm, {
-            toValue: 0,
-            useNativeDriver: false,
-        }).start();
-    };
-
-
+    // all varable declaration start
     const [showHideImg, toggleshowHideImg] = useState(true);       //showHideImg is used to  toggle image when form focused 
     const [email, setEmail] = useState('');
     const [emailValidError, setEmailValidError] = useState('');
     const [password, setPassword] = useState('');
     const [passwordValidError, setpasswordValidError] = useState('');
+    // all varable declaration end
+
+
+    // calculating screen width and height
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
+
+    // Animated image and form using this
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const translation = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+
+    const fadeIn = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 2000,
+            useNativeDriver: false,
+        }).start();
+    };
+
+
+    const fadeOut = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 1300,
+            useNativeDriver: false,
+        }).start();
+    };
+
+
+    const fadeInaForm = () => {
+        Animated.timing(translation.y, {
+            toValue: -20,
+            duration: 1800,
+            useNativeDriver: true,
+        }).start();
+    };
+
+    const makeformNormal = () => {
+        const fadeInaForm = () => {
+            Animated.timing(translation.y, {
+                toValue: 0,
+                useNativeDriver: true,
+            }).start();
+        };
+    }
+
 
     //Email validation function
     const handleEmailValidation = val => {
@@ -90,22 +92,12 @@ const Login = ({ navigation }) => {
     }
 
     useEffect(() => {
-        fadeInaForm();
-        if (showHideImg) {
-            setTimeout(() => {
-                fadeIn();
-            }, 500);
-        }
-
+        fadeIn();
     })
-
-
-
 
 
     return (
         <SafeAreaView style={styles.container}>
-            {showHideImg ?
                 <Animated.View
                     style={
                         [styles.imageHolder, { opacity: fadeAnim }]
@@ -113,9 +105,9 @@ const Login = ({ navigation }) => {
                 >
                     <LoginImage width={windowWidth * 0.8} height={windowHeight * 0.4} />
                 </Animated.View>
-                : null}
             <KeyboardAvoidingView
                 behavior='height'
+                keyboardVerticalOffset={-200}
             >
 
 
@@ -133,7 +125,6 @@ const Login = ({ navigation }) => {
                             { translateX: translation.x },
                             { translateY: translation.y },
                         ]
-                        // transform: [{ translateY: fadeAnimForm }],
                     }}
                 >
                     <Text style={head1}>Login</Text>
@@ -149,8 +140,12 @@ const Login = ({ navigation }) => {
                             autoCorrect={false}
                             autoCapitalize="none"
                             placeholderTextColor={Colors.color3}
-                            onFocus={() => toggleshowHideImg(!showHideImg)}     //image will be hidden 
-                            onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown
+                            onFocus={() => {
+                                fadeOut();
+                                setTimeout(() => {
+                                    fadeInaForm();
+                                }, 500)
+                            }}     //image will be hidden 
                             onChangeText={(value) => {
                                 setEmail(value)
                                 handleEmailValidation(email)
@@ -167,8 +162,17 @@ const Login = ({ navigation }) => {
                             value={password}
                             autoCorrect={false}
                             autoCapitalize="none"
-                            onFocus={() => toggleshowHideImg(!showHideImg)}      //image will be hidden 
-                            onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown 
+                            onFocus={() => {
+                                fadeOut();
+                                setTimeout(() => {
+                                    fadeInaForm();
+                                }, 500)
+                            }}     //image will be hidden 
+                            onBlur={() => {
+                                fadeIn();
+                                makeformNormal();
+
+                            }}      //image will be shown
                             onChangeText={(value) => {
                                 setPassword(value)
                                 handlePasswordValidationAlert(value)
@@ -180,9 +184,6 @@ const Login = ({ navigation }) => {
                         <Text style={styles.link}>Forgot password?</Text>
                     </View>
                     <PrimaryButton
-                    // onPress={
-                    //     () => 
-                    // }
                     >Login</PrimaryButton>
 
                     <View>
@@ -213,7 +214,8 @@ const styles = StyleSheet.create({
         maxHeight: "50%",
         maxWidth: "100%",
         alignItems: "center",
-        justifyContent: "flex-start"
+        justifyContent: "flex-start",
+        zIndex: -1,
     },
     s2: {
         display: "flex",
