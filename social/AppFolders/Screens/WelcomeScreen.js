@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, Dimensions, Animated } from 'react-native';
 import Colors from '../Constants/Colors';
 import WelcomeSvg from "../assets/images/SVGImages/WELCOME4img.svg"
@@ -8,12 +8,42 @@ import { H1, H5, H6 } from '../Components/UI/Heading';
 const WelcomeScreen = ({ navigation }) => {
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
-    
+
+    // Animated image and form using this
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
+    const fadeIn = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 2000,
+            useNativeDriver: false,
+        }).start();
+    };
+
+
+    const fadeOut = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 1300,
+            useNativeDriver: false,
+        }).start();
+    };
+
+
+
+    useEffect(() => {
+        fadeIn();
+    })
+
     return (
         <View style={styles.container}>
-            <View style={styles.imageHolder}>
+            <Animated.View
+                style={
+                    [styles.imageHolder, { opacity: fadeAnim }]
+                }
+            >
                 <WelcomeSvg width={windowWidth * 0.8} height={windowHeight * 0.4} />
-            </View>
+            </Animated.View>
             <View style={styles.TextData}>
                 <H1 style={styles.WelcomeText}>Hello</H1>
                 <H6 style={styles.WelcomeTextSmall}>Become a part of our community..</H6>

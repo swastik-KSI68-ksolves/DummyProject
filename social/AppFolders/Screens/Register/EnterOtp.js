@@ -1,3 +1,5 @@
+//Done 
+
 import React, { useState } from 'react'
 import { View, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Text, TextInput, KeyboardAvoidingView } from 'react-native'
 import RegisterImage from "../../assets/images/SVGImages/EnterOTP.svg"
@@ -8,7 +10,7 @@ import BottomNavBar from '../../Components/BottomNavBar'
 
 const EnterOtp = () => {
 
-    const [underlineColor, setunderlineColor] = useState(Colors.color0)
+    const underlineColor = Colors.color0;
     const [displayButton, setDisplayButton] = useState(0)
 
     var otpArray = []
@@ -25,9 +27,12 @@ const EnterOtp = () => {
     const otpMaker = () => {
         let otp = otpArray.join("");
         console.debug("otp = ", otp)
-        console.debug(typeof otp)
         otp = Number(otp)
-        console.debug(typeof otp)
+    }
+
+    const setArraytoZero = () => {
+        otpArray = [];
+        setDisplayButton(0);
     }
 
     return (
@@ -47,7 +52,8 @@ const EnterOtp = () => {
                                 style={styles.input}
                                 maxLength={1}
                                 keyboardType={'numeric'}
-                                onChangeText={(value) => { handleInputBoxChange(value); this.secondTextInput.focus(); }}
+                                ref={(input) => { this.firstTextInput = input; }}
+                                onChangeText={(value) => { handleInputBoxChange(value); value.length == 1 ? this.secondTextInput.focus() : null }}
                                 blurOnSubmit={false}
                                 underlineColorAndroid={underlineColor}
 
@@ -57,7 +63,7 @@ const EnterOtp = () => {
                                 maxLength={1}
                                 keyboardType={'numeric'}
                                 ref={(input) => { this.secondTextInput = input; }}
-                                onChangeText={(value) => { handleInputBoxChange(value); this.thirdTextInput.focus(); }}
+                                onChangeText={(value) => { handleInputBoxChange(value); value.length == 1 ? this.thirdTextInput.focus() : this.firstTextInput.focus() }}
                                 blurOnSubmit={false}
                                 underlineColorAndroid={underlineColor}
 
@@ -67,9 +73,10 @@ const EnterOtp = () => {
                                 maxLength={1}
                                 keyboardType={'numeric'}
                                 ref={(input) => { this.thirdTextInput = input; }}
-                                onChangeText={(value) => { handleInputBoxChange(value); this.fourthTextInput.focus(); }}
+                                onChangeText={(value) => { handleInputBoxChange(value); value.length == 1 ? this.fourthTextInput.focus() : this.secondTextInput.focus() }}
                                 blurOnSubmit={false}
                                 underlineColorAndroid={underlineColor}
+
 
                             />
                             <TextInput
@@ -77,7 +84,11 @@ const EnterOtp = () => {
                                 maxLength={1}
                                 keyboardType={'numeric'}
                                 ref={(input) => { this.fourthTextInput = input; }}
-                                onChangeText={(value) => { handleInputBoxChange(value); otpMaker(); setDisplayButton(1) }}
+                                onChangeText={(value) => {
+                                    handleInputBoxChange(value); otpMaker();
+                                    value.length == 1 ? setDisplayButton(1) : this.thirdTextInput.focus()
+                                    value.length == 0 ? setArraytoZero() : null
+                                }}
                                 underlineColorAndroid={underlineColor}
 
                             />
@@ -88,6 +99,7 @@ const EnterOtp = () => {
 
                 </View>
             </KeyboardAvoidingView>
+            <BottomNavBar />
         </SafeAreaView>
     )
 }
@@ -145,7 +157,7 @@ const styles = StyleSheet.create({
         padding: 20,
         fontSize: 20,
     },
- 
+
 });
 
 
