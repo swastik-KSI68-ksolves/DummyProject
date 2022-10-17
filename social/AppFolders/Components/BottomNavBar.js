@@ -5,52 +5,37 @@ import Iconborder from 'react-native-vector-icons/AntDesign';
 import Colors from '../Constants/Colors';
 
 const BottomNavBar = () => {
-
-    const [colorChanged, setColorChanged] = useState('none');
+    // all variables 
     const [icon1Color, setIcon1Color] = useState(Colors.color4);
     const [icon2Color, setIcon2Color] = useState(Colors.color4);
     const [icon3Color, setIcon3Color] = useState(Colors.color4);
     const [icon4Color, setIcon4Color] = useState(Colors.color4);
     const [icon5Color, setIcon5Color] = useState(Colors.color4);
 
-    // all variables 
 
-    // const setIconColor = (icon, color = Colors.color0) => {
-    //     icon = color
-    // }
-
-    const setOtherIconColor = (icon1 = true, icon2 = true, icon3 = true, icon4 = true, icon5 = true) => {
-        if (icon1) {
-            setIcon1Color(Colors.color4)
-        }
-        if (icon2) {
-            setIcon2Color(Colors.color4)
-        }
-        if (icon3) {
-            setIcon3Color(Colors.color4)
-        }
-        if (icon4) {
-            setIcon4Color(Colors.color4)
-        }
-        if (icon5) {
-            setIcon5Color(Colors.color4)
-        }
+    const resetIconColor = () => {
+        setIcon1Color(Colors.color4);
+        setIcon2Color(Colors.color4);
+        setIcon3Color(Colors.color4);
+        setIcon4Color(Colors.color4);
+        setIcon5Color(Colors.color4);
     }
 
     const manageColorChange = (iconNumber) => {
-        if (iconNumber === 'icon1') {
+        resetIconColor();
+        if (iconNumber === 1) {
             setIcon1Color(Colors.colorRedShade)
         }
-        if (iconNumber === 'icon2') {
+        if (iconNumber === 2) {
             setIcon2Color(Colors.colorRedShade)
         }
-        if (iconNumber === 'icon3') {
+        if (iconNumber === 3) {
             setIcon3Color(Colors.colorRedShade)
         }
-        if (iconNumber === 'icon4') {
+        if (iconNumber === 4) {
             setIcon4Color(Colors.colorRedShade)
         }
-        if (iconNumber === 'icon5') {
+        if (iconNumber === 5) {
             setIcon5Color(Colors.colorRedShade)
         }
     }
@@ -61,7 +46,7 @@ const BottomNavBar = () => {
             <View>
                 <Pressable
                     style={({ pressed }) => pressed ? styles.pressed : null}
-                    onPress={() => { manageColorChange('icon1'); setOtherIconColor(false, true, true, true, true) }}
+                    onPress={() => { manageColorChange(1) }}
                 >
                     <Iconborder name="home" size={25} color={icon1Color} />
                 </Pressable>
@@ -69,7 +54,7 @@ const BottomNavBar = () => {
             <View>
                 <Pressable
                     style={({ pressed }) => pressed ? styles.pressed : null}
-                    onPress={() => { manageColorChange('icon2'); setOtherIconColor(true, false, true, true, true) }}
+                    onPress={() => { manageColorChange(2) }}
                 >
                     <Iconborder name="search1" size={25} color={icon2Color} />
                 </Pressable>
@@ -77,7 +62,7 @@ const BottomNavBar = () => {
             <View>
                 <Pressable
                     style={({ pressed }) => pressed ? styles.pressed : null}
-                    onPress={() => { manageColorChange('icon3'); setOtherIconColor(true, true, false, true, true) }}
+                    onPress={() => { manageColorChange(3) }}
                 >
                     <Iconborder name="pluscircleo" size={25} color={icon3Color} />
                 </Pressable>
@@ -85,7 +70,7 @@ const BottomNavBar = () => {
             <View>
                 <Pressable
                     style={({ pressed }) => pressed ? styles.pressed : null}
-                    onPress={() => { manageColorChange('icon4'); setOtherIconColor(true, true, true, false, true) }}
+                    onPress={() => { manageColorChange(4) }}
                 >
                     <Iconborder name="hearto" size={25} color={icon4Color} />
                 </Pressable>
@@ -93,7 +78,7 @@ const BottomNavBar = () => {
             <View>
                 <Pressable
                     style={({ pressed }) => pressed ? styles.pressed : null}
-                    onPress={() => { manageColorChange('icon5'); setOtherIconColor(true, true, true, true, false) }}
+                    onPress={() => { manageColorChange(5) }}
                 >
                     <Icon name="user-circle" size={25} color={icon5Color} />
                 </Pressable>
