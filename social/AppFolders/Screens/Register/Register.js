@@ -13,40 +13,82 @@ const Register = ({ navigation }) => {
     // Animated image and form using this
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const translation = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
-
-    const fadeIn = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 2000,
-            useNativeDriver: false,
-        }).start();
-    };
+    const translationimg = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
 
 
-    const fadeOut = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 0,
-            duration: 1300,
-            useNativeDriver: false,
-        }).start();
-    };
+    // const fadeIn = () => {
+    //     Animated.timing(fadeAnim, {
+    //         toValue: 1,
+    //         duration: 2000,
+    //         useNativeDriver: false,
+    //     }).start();
+    // };
 
 
-    const fadeInaForm = () => {
-        Animated.timing(translation.y, {
-            toValue: -100,
-            duration: 1800,
-            useNativeDriver: true,
-        }).start();
-    };
+    // const fadeOut = () => {
+    //     Animated.timing(fadeAnim, {
+    //         toValue: 0,
+    //         duration: 1300,
+    //         useNativeDriver: false,
+    //     }).start();
+    // };
 
-    const makeformNormal = () => {
-        const fadeInaForm = () => {
-            Animated.timing(translation.y, {
-                toValue: 20,
+
+    // const fadeInaForm = () => {
+    //     Animated.timing(translation.y, {
+    //         toValue: -100,
+    //         duration: 1800,
+    //         useNativeDriver: true,
+    //     }).start();
+    // };
+
+    // const makeformNormal = () => {
+    //     const fadeInaForm = () => {
+    //         Animated.timing(translation.y, {
+    //             toValue: 20,
+    //             useNativeDriver: true,
+    //         }).start();
+    //     };
+    // }
+
+    const fadeInImageWithScaleHide = () => {
+        Animated.parallel([
+            Animated.timing(translationimg.y, {
+                toValue: 0,
+                duration: 1000,
                 useNativeDriver: true,
-            }).start();
-        };
+            }),
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 1200,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translation.y, {
+                toValue: -60,
+                duration: 2000,
+                useNativeDriver: true,
+            })
+        ], { stopTogether: false }).start();
+    }
+
+    const fadeInImageWithScale = () => {
+        Animated.parallel([
+            Animated.timing(translationimg.y, {
+                toValue: 20,
+                duration: 1200,
+                useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 1800,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translation.y, {
+                toValue: 0,
+                duration: 2000,
+                useNativeDriver: true,
+            })
+        ], { stopTogether: false }).start();
     }
 
 
@@ -88,7 +130,7 @@ const Register = ({ navigation }) => {
     }
 
     useEffect(() => {
-        fadeIn();
+        fadeInImageWithScale();
     })
 
 
@@ -96,12 +138,25 @@ const Register = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <Animated.View
                 style={
-                    [styles.imageHolder, { opacity: fadeAnim }]
+                    {
+                        flex: 1,
+                        maxHeight: "30%",
+                        maxWidth: "100%",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: 15,
+                        zIndex: -1,
+                        opacity: fadeAnim,
+                        transform: [
+                            { translateX: translationimg.x },
+                            { translateY: translationimg.y },
+                        ]
+                    }
                 }
             >
                 <RegisterImage width={windowWidth * 0.6} height={windowHeight * 0.4} />
             </Animated.View>
-            <Animated.ScrollView
+            <Animated.View
                 style={{
                     flex: 1,
                     display: "flex",
@@ -134,10 +189,11 @@ const Register = ({ navigation }) => {
                         placeholder="Enter your Name"
                         placeholderTextColor={Colors.color3}
                         onFocus={() => {
-                            fadeOut();
-                            setTimeout(() => {
-                                fadeInaForm();
-                            }, 500)
+                            fadeInImageWithScaleHide()
+                            // fadeOut();
+                            // setTimeout(() => {
+                            //     fadeInaForm();
+                            // }, 500)
                         }}    //image will be hidden 
                     />
                 </View>
@@ -147,10 +203,11 @@ const Register = ({ navigation }) => {
                         placeholder="Enter your Email"
                         placeholderTextColor={Colors.color3}
                         onFocus={() => {
-                            fadeOut();
-                            setTimeout(() => {
-                                fadeInaForm();
-                            }, 500)
+                            fadeInImageWithScaleHide()
+                            // fadeOut();
+                            // setTimeout(() => {
+                            //     fadeInaForm();
+                            // }, 500)
                         }}     //image will be hidden 
                     />
                 </View>
@@ -160,10 +217,11 @@ const Register = ({ navigation }) => {
                         placeholderTextColor={Colors.color3}
                         secureTextEntry={true}
                         onFocus={() => {
-                            fadeOut();
-                            setTimeout(() => {
-                                fadeInaForm();
-                            }, 500)
+                            fadeInImageWithScaleHide()
+                            // fadeOut();
+                            // setTimeout(() => {
+                            //     fadeInaForm();
+                            // }, 500)
                         }}     //image will be hidden 
 
                     />
@@ -175,14 +233,16 @@ const Register = ({ navigation }) => {
                         placeholder="Enter your password again"
                         secureTextEntry={true}
                         onFocus={() => {
-                            fadeOut();
-                            setTimeout(() => {
-                                fadeInaForm();
-                            }, 500)
+                            fadeInImageWithScaleHide()
+                            // fadeOut();
+                            // setTimeout(() => {
+                            //     fadeInaForm();
+                            // }, 500)
                         }}    //image will be hidden 
                         onBlur={() => {
-                            fadeIn();
-                            makeformNormal();
+                            fadeInImageWithScale()
+                            // fadeIn();
+                            // makeformNormal();
 
                         }}    //image will be shown
 
@@ -191,7 +251,7 @@ const Register = ({ navigation }) => {
                 <PrimaryButton
                     onPress={() => navigation.navigate('enterOtp')}
                 >Register</PrimaryButton>
-            </Animated.ScrollView>
+            </Animated.View>
         </SafeAreaView>
 
     )
