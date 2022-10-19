@@ -4,6 +4,7 @@ import Colors from '../Constants/Colors';
 import WelcomeSvg from "../assets/images/SVGImages/WELCOME4img.svg"
 import PrimaryButton from "../Components/PrimaryButton"
 import { H1, H5, H6 } from '../Components/UI/Heading';
+import Lottie from 'lottie-react-native';
 
 const WelcomeScreen = ({ navigation }) => {
     const windowWidth = Dimensions.get('window').width;
@@ -42,7 +43,8 @@ const WelcomeScreen = ({ navigation }) => {
                     [styles.imageHolder, { opacity: fadeAnim }]
                 }
             >
-                <WelcomeSvg width={windowWidth * 0.8} height={windowHeight * 0.4} />
+                <Lottie source={require('../assets/Lottiefiles/welcome.json')} autoPlay loop />
+                {/* <WelcomeSvg width={windowWidth * 0.8} height={windowHeight * 0.4} /> */}
             </Animated.View>
             <View style={styles.TextData}>
                 <H1 style={styles.WelcomeText}>Hello</H1>
@@ -50,6 +52,7 @@ const WelcomeScreen = ({ navigation }) => {
             </View>
             <View style={styles.ButtonData}>
                 <PrimaryButton
+                    style={styles.buttonStyle1}
                     onPress={() => navigation.navigate('login')}
                 >Login</PrimaryButton>
                 <View style={{ paddingVertical: 5 }}></View>
@@ -97,7 +100,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     buttonStyle2: {
-        backgroundColor: Colors.colorRedShade,
+        backgroundColor: "#ff681c",
+    },
+    buttonStyle1: {
+        backgroundColor: Colors.colorRedShade
     },
     WelcomeText: {
         fontFamily: "Merienda-Bold",

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Text, TextInput, Dimensions } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { View, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Text, TextInput, Dimensions, Animated, KeyboardAvoidingView } from 'react-native'
 import RegisterImage from "../../assets/images/SVGImages/signup1.svg"
 import { button1, head1, head2 } from '../../CommonStyling/Common'
 import PrimaryButton from '../../Components/PrimaryButton'
@@ -9,6 +9,90 @@ const Register = ({ navigation }) => {
     //calculating screen width and height
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
+
+   
+
+    // Animated image and form using this
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const translation = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+    const translationimg = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+
+
+    // const fadeIn = () => {
+    //     Animated.timing(fadeAnim, {
+    //         toValue: 1,
+    //         duration: 2000,
+    //         useNativeDriver: false,
+    //     }).start();
+    // };
+
+
+    // const fadeOut = () => {
+    //     Animated.timing(fadeAnim, {
+    //         toValue: 0,
+    //         duration: 1300,
+    //         useNativeDriver: false,
+    //     }).start();
+    // };
+
+
+    // const fadeInaForm = () => {
+    //     Animated.timing(translation.y, {
+    //         toValue: -100,
+    //         duration: 1800,
+    //         useNativeDriver: true,
+    //     }).start();
+    // };
+
+    // const makeformNormal = () => {
+    //     const fadeInaForm = () => {
+    //         Animated.timing(translation.y, {
+    //             toValue: 20,
+    //             useNativeDriver: true,
+    //         }).start();
+    //     };
+    // }
+
+    const fadeInImageWithScaleHide = () => {
+        Animated.parallel([
+            Animated.timing(translationimg.y, {
+                toValue: 0,
+                duration: 1000,
+                useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 1200,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translation.y, {
+                toValue: -60,
+                duration: 2000,
+                useNativeDriver: true,
+            })
+        ], { stopTogether: false }).start();
+    }
+
+    const fadeInImageWithScale = () => {
+        Animated.parallel([
+            Animated.timing(translationimg.y, {
+                toValue: 20,
+                duration: 1200,
+                useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 1800,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translation.y, {
+                toValue: 0,
+                duration: 2000,
+                useNativeDriver: true,
+            })
+        ], { stopTogether: false }).start();
+    }
+
 
     const [showHideImg, toggleshowHideImg] = useState(1);
     const [email, setEmail] = useState('');
@@ -46,12 +130,49 @@ const Register = ({ navigation }) => {
             styles.passwordMsg = styles.PasswordWeak
         }
     }
+
+    useEffect(() => {
+        fadeInImageWithScale();
+    })
+
+
     return (
         <SafeAreaView style={styles.container}>
-            {showHideImg ? <View style={styles.imageHolder}>
-                <RegisterImage width={windowWidth * 0.8} height={windowHeight * 0.4} />
-            </View> : null}
-            <ScrollView style={styles.s2}>
+            <Animated.View
+                style={
+                    {
+                        flex: 1,
+                        maxHeight: "30%",
+                        maxWidth: "100%",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: 15,
+                        zIndex: -1,
+                        opacity: fadeAnim,
+                        transform: [
+                            { translateX: translationimg.x },
+                            { translateY: translationimg.y },
+                        ]
+                    }
+                }
+            >
+                <RegisterImage width={windowWidth * 0.6} height={windowHeight * 0.4} />
+            </Animated.View>
+            <Animated.View
+                style={{
+                    flex: 1,
+                    display: "flex",
+                    // zIndex: -1,
+                    minWidth: "100%",
+                    maxHeight: "60%",
+                    paddingHorizontal: 20,
+                    marginTop: 10,
+                    transform: [
+                        { translateX: translation.x },
+                        { translateY: translation.y },
+                    ]
+                }}
+            >
                 <Text style={head1}>Create a new account</Text>
                 <Text style={styles.link2}>Already registered?&nbsp;
                     <Text style={styles.link}
@@ -69,8 +190,13 @@ const Register = ({ navigation }) => {
                     <TextInput style={styles.input}
                         placeholder="Enter your Name"
                         placeholderTextColor={Colors.color3}
-                        onFocus={() => toggleshowHideImg(!showHideImg)}     //image will be hidden 
-                        onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown
+                        onFocus={() => {
+                            fadeInImageWithScaleHide()
+                            // fadeOut();
+                            // setTimeout(() => {
+                            //     fadeInaForm();
+                            // }, 500)
+                        }}    //image will be hidden 
                     />
                 </View>
                 <View style={styles.formgroup}>
@@ -78,8 +204,13 @@ const Register = ({ navigation }) => {
                     <TextInput style={styles.input}
                         placeholder="Enter your Email"
                         placeholderTextColor={Colors.color3}
-                        onFocus={() => toggleshowHideImg(!showHideImg)}     //image will be hidden 
-                        onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown
+                        onFocus={() => {
+                            fadeInImageWithScaleHide()
+                            // fadeOut();
+                            // setTimeout(() => {
+                            //     fadeInaForm();
+                            // }, 500)
+                        }}     //image will be hidden 
                     />
                 </View>
                 <View style={styles.formgroup}>
@@ -87,8 +218,13 @@ const Register = ({ navigation }) => {
                     <TextInput style={styles.input} placeholder="Enter your password"
                         placeholderTextColor={Colors.color3}
                         secureTextEntry={true}
-                        onFocus={() => toggleshowHideImg(!showHideImg)}     //image will be hidden 
-                        onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown
+                        onFocus={() => {
+                            fadeInImageWithScaleHide()
+                            // fadeOut();
+                            // setTimeout(() => {
+                            //     fadeInaForm();
+                            // }, 500)
+                        }}     //image will be hidden 
 
                     />
                 </View>
@@ -98,15 +234,26 @@ const Register = ({ navigation }) => {
                         placeholderTextColor={Colors.color3}
                         placeholder="Enter your password again"
                         secureTextEntry={true}
-                        onFocus={() => toggleshowHideImg(!showHideImg)}     //image will be hidden 
-                        onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown
+                        onFocus={() => {
+                            fadeInImageWithScaleHide()
+                            // fadeOut();
+                            // setTimeout(() => {
+                            //     fadeInaForm();
+                            // }, 500)
+                        }}    //image will be hidden 
+                        onBlur={() => {
+                            fadeInImageWithScale()
+                            // fadeIn();
+                            // makeformNormal();
+
+                        }}    //image will be shown
 
                     />
                 </View>
                 <PrimaryButton
                     onPress={() => navigation.navigate('enterOtp')}
                 >Register</PrimaryButton>
-            </ScrollView>
+            </Animated.View>
         </SafeAreaView>
 
     )
@@ -119,21 +266,13 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.color4,
     },
     imageHolder: {
-        flex: 2,
-        maxHeight: "55%",
+        flex: 1,
+        maxHeight: "30%",
         maxWidth: "100%",
         alignItems: "center",
         justifyContent: "center",
-        padding: 15
-    },
-    s2: {
-        display: "flex",
-        // backgroundColor: "rgba(0,0,0,0.4)",
+        padding: 15,
         zIndex: -1,
-        width: "100%",
-        height: "45%",
-        paddingHorizontal: 20,
-        marginTop: 10,
     },
     formgroup: {
         display: "flex",

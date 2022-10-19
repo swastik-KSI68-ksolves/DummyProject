@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native';
-import { WelcomeScreen, Login, Register, EnterOtp } from "./AppFolders/ModuleExports/index"
+import { WelcomeScreen, Login, Register, EnterOtp, Home, Search, FollowScreen, UserProfile } from "./AppFolders/ModuleExports/index"
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SplashScreen from "react-native-splash-screen"
-import Home from "./AppFolders/Screens/homePage/Home";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,31 +15,55 @@ const App = () => {
   }, [])
 
   return (
-    <Home />
-    //   <NavigationContainer>
-    //     <Stack.Navigator>
-    //       <Stack.Screen name="Welcome" component={WelcomeScreen}
-    //         options={{
-    //           headerShown: false
-    //         }}
-    //       />
-    //       <Stack.Screen name="login" component={Login}
-    //         options={{
-    //           headerShown: false
-    //         }}
-    //       />
-    //       <Stack.Screen name="register" component={Register}
-    //         options={{
-    //           headerShown: false
-    //         }}
-    //       />
-    //       <Stack.Screen name="enterOtp" component={EnterOtp}
-    //         options={{
-    //           headerShown: false
-    //         }}
-    //       />
-    //     </Stack.Navigator>
-    //   </NavigationContainer>
+    // <Home />
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Welcome" component={WelcomeScreen}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen name="login" component={Login}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen name="register" component={Register}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen name="enterOtp" component={EnterOtp}
+          options={{
+            headerShown: false
+          }}
+        />
+
+        <Stack.Screen name="home" component={Home}
+          options={{
+            headerShown: false
+          }}
+        />
+
+        <Stack.Screen name="search" component={Search}
+          options={{
+            headerShown: false
+          }}
+        />
+
+        <Stack.Screen name="follow" component={FollowScreen}
+          options={{
+            headerShown: false
+          }}
+        />
+
+        <Stack.Screen name="profile" component={UserProfile}
+          options={{
+            headerShown: false
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 

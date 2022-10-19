@@ -1,7 +1,8 @@
 const Colors = {
     // Blue shades start here
     color0: "#4F52EE",
-    color01: "#6063ef",
+    color01: "#ff681c",
+    // color01: "#6063ef",
 
     //Red Color shades
     colorRedShade: "#FF4A4A",

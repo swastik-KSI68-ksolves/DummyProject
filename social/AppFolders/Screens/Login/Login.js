@@ -1,85 +1,48 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { View, StyleSheet, Text, TextInput, SafeAreaView, KeyboardAvoidingView, Dimensions, Animated, Easing, Image } from 'react-native'
+import { View, StyleSheet, Text, TextInput, SafeAreaView, KeyboardAvoidingView, Keyboard, Animated, Easing, Image } from 'react-native'
 import Colors from "../../Constants/Colors"
 import LoginImage from "../../assets/images/SVGImages/LoginGirl.svg"
 import { head1, head2, button1 } from "../../CommonStyling/Common"
 import PrimaryButton from '../../Components/PrimaryButton'
+import Lottie from 'lottie-react-native';
+import styling from '../../CommonStyling/StylingForRegisterAndLogin'
 
 const Login = ({ navigation }) => {
-    // calculating screen width and height
-    const windowWidth = Dimensions.get('window').width;
-    const windowHeight = Dimensions.get('window').height;
 
-    // all varable declaration start
-    const [imgwidth, setImgWidth] = useState(windowWidth * 0.2);
-    const [imgHeight, setimgHeight] = useState(windowHeight * 0.2);
     const [email, setEmail] = useState('');
     const [emailValidError, setEmailValidError] = useState('');
     const [password, setPassword] = useState('');
     const [passwordValidError, setpasswordValidError] = useState('');
     // all varable declaration end
 
+    const imageContainer = useRef(new Animated.Value(1.2)).current;
 
 
-
-    // Animated image and form using this
-    const fadeAnim = useRef(new Animated.Value(0)).current;
-    const imageContainer = useRef(new Animated.Value(0.5)).current;
-    const translation = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
-    const translationimg = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
-
-
-
-    const fadeInImageWithScaleHide = () => {
-
-        Animated.parallel([
+    useEffect(() => {
+        // componentWillMount 
+        const keyboardWillShowSub = Keyboard.addListener('keyboardDidShow', (event) => {
+            // fadeInImageWithScaleHide();
             Animated.timing(imageContainer, {
-                toValue: 0,
-                duration: 1200,
-                useNativeDriver: true
-            }),
-            Animated.timing(translationimg.y, {
-                toValue: 0,
-                duration: 1500,
-                useNativeDriver: true,
-            }),
-            Animated.timing(fadeAnim, {
-                toValue: 0,
-                duration: 1800,
-                useNativeDriver: true,
-            }),
-            Animated.timing(translation.y, {
-                toValue: -20,
-                duration: 2000,
-                useNativeDriver: true,
-            })
-        ], { stopTogether: false }).start();
-    }
-
-    const fadeInImageWithScale = () => {
-        Animated.parallel([
-            Animated.timing(translationimg.y, {
-                toValue: 20,
-                duration: 2500,
-                useNativeDriver: true,
-            }),
+                duration: event.duration,
+                toValue: 5,
+                useNativeDriver: false,
+            }).start();
+        });
+        const keyboardWillHideSub = Keyboard.addListener('keyboardDidHide', (event) => {
+            // fadeInImageWithScale
             Animated.timing(imageContainer, {
-                toValue: 1,
-                duration: 1200,
-                useNativeDriver: true
-            }),
-            Animated.timing(fadeAnim, {
-                toValue: 1,
-                duration: 1800,
-                useNativeDriver: true,
-            }),
-            Animated.timing(translation.y, {
-                toValue: 10,
-                duration: 2000,
-                useNativeDriver: true,
-            })
-        ], { stopTogether: true }).start();
-    }
+                duration: event.duration,
+                toValue: 1.2,
+                useNativeDriver: false,
+            }).start();
+        });
+
+        return () => {
+            //   componentWillUnmount
+            keyboardWillShowSub.remove();
+            keyboardWillHideSub.remove();
+        }
+    }, [])
 
 
     //Email validation function
@@ -113,138 +76,92 @@ const Login = ({ navigation }) => {
         }
     }
 
-    useEffect(() => {
-        fadeInImageWithScale();
-    })
+
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior="height"
+        >
             <Animated.View
                 style={{
-                    flex: 2,
-                    maxHeight: "50%",
-                    maxWidth: "100%",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    zIndex: -1,
-                    opacity: fadeAnim,
-                    transform: [
-                        { translateX: translationimg.x },
-                        { translateY: translationimg.y },
-                    ]
-                }
-                }
+                    width: "100%",
+                    aspectRatio: imageContainer
+                }}
             >
-                <Animated.View
-                    style={{
-                        transform: [
-                            { scaleX: imageContainer },
-                            { scaleY: imageContainer }
-                        ]
-                    }}
-                >
-                    <LoginImage height={windowWidth * 0.8} width={windowHeight * 0.4} />
-                </Animated.View>
-                {/* <Image
-                    source={require("../../assets/images/SVGImages/LoginGirl.svg")}
-                    style={{ maxHeight: 50, maxWidth: 50 }}
-                /> */}
+                <Lottie
+                    autoPlay={true}
+                    loop={true}
+                    source={require('../../assets/Lottiefiles/register.json')}
+                />
             </Animated.View>
-            <KeyboardAvoidingView
-                behavior='height'
-                keyboardVerticalOffset={-200}
-            >
 
 
-                <Animated.View
-                    style={{
-                        display: "flex",
-                        zIndex: -1,
-                        width: "100%",
-                        height: "60%",
-                        borderTopLeftRadius: 30,
-                        borderTopRightRadius: 30,
-                        padding: 20,
-                        paddingTop: 10,
-                        transform: [
-                            { translateX: translation.x },
-                            { translateY: translation.y },
-                        ]
+            <Text style={head1}>Login</Text>
+            {emailValidError ? <Text style={[head2, { color: "red" }]}>{emailValidError}</Text> :
+                passwordValidError ? <Text style={[head2, styles.passwordMsg]}> {passwordValidError} </Text> :
+                    <Text style={head2}>Sign in to continue</Text>}
+
+            <View style={styles.formgroup}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput style={styles.input}
+                    placeholder="Enter your Email"
+                    value={email}
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    placeholderTextColor={Colors.color3}
+                    onChangeText={(value) => {
+                        setEmail(value)
+                        handleEmailValidation(email)
                     }}
-                >
-                    <Text style={head1}>Login</Text>
-                    {emailValidError ? <Text style={[head2, { color: "red" }]}>{emailValidError}</Text> :
-                        passwordValidError ? <Text style={[head2, styles.passwordMsg]}> {passwordValidError} </Text> :
-                            <Text style={head2}>Sign in to continue</Text>}
+                    onPressIn={() => setEmailValidError(null)}      // remove error message on click 
 
-                    <View style={styles.formgroup}>
-                        <Text style={styles.label}>Email</Text>
-                        <TextInput style={styles.input}
-                            placeholder="Enter your Email"
-                            value={email}
-                            autoCorrect={false}
-                            autoCapitalize="none"
-                            placeholderTextColor={Colors.color3}
-                            onFocus={() => {
-                                fadeInImageWithScaleHide();
-                                // setTimeout(() => {
-                                //     fadeInaForm();
-                                // }, 500)
-                            }}     //image will be hidden 
-                            onChangeText={(value) => {
-                                setEmail(value)
-                                handleEmailValidation(email)
-                            }}
-                            onPressIn={() => setEmailValidError(null)}      // remove error message on click 
+                />
+            </View>
+            <View style={styles.formgroup}>
+                <Text style={styles.label}>Password</Text>
+                <TextInput style={styles.input} placeholder="Enter your password"
+                    placeholderTextColor={Colors.color3}
+                    secureTextEntry={true}
+                    value={password}
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    // onFocus={() => {
+                    //     fadeInImageWithScaleHide();
+                    //     // setTimeout(() => {
+                    //     //     fadeInaForm();
+                    //     // }, 500)
+                    // }}     //image will be hidden 
+                    // onBlur={() => {
+                    //     fadeInImageWithScale();
+                    //     // makeformNormal();
 
-                        />
-                    </View>
-                    <View style={styles.formgroup}>
-                        <Text style={styles.label}>Password</Text>
-                        <TextInput style={styles.input} placeholder="Enter your password"
-                            placeholderTextColor={Colors.color3}
-                            secureTextEntry={true}
-                            value={password}
-                            autoCorrect={false}
-                            autoCapitalize="none"
-                            onFocus={() => {
-                                fadeInImageWithScaleHide();
-                                // setTimeout(() => {
-                                //     fadeInaForm();
-                                // }, 500)
-                            }}     //image will be hidden 
-                            onBlur={() => {
-                                fadeInImageWithScale();
-                                // makeformNormal();
-
-                            }}      //image will be shown
-                            onChangeText={(value) => {
-                                setPassword(value)
-                                handlePasswordValidationAlert(value)
-                            }}
-                            onPressIn={() => { setEmailValidError(null) }}          // remove error message on click 
-                        />
-                    </View>
-                    <View style={styles.fp}>
-                        <Text style={styles.link}>Forgot password?</Text>
-                    </View>
-                    <PrimaryButton
-                    >Login</PrimaryButton>
-
-                    <View>
-                        <Text style={styles.link2}>Don't have an account?&nbsp;
-                            <Text style={styles.link}
-                                onPress={() => navigation.navigate('register')}  //navigate to register screen
-                            >
-                                Create a new account
-                            </Text></Text>
-                    </View>
-                </Animated.View>
+                    // }}      //image will be shown
+                    onChangeText={(value) => {
+                        setPassword(value)
+                        handlePasswordValidationAlert(value)
+                    }}
+                    onPressIn={() => { setEmailValidError(null) }}          // remove error message on click 
+                />
+            </View>
+            <View style={styles.fp}>
+                <Text style={styles.link}>Forgot password?</Text>
+            </View>
+            <PrimaryButton
+                style={styles.buttonLogin}
+            >      Login      </PrimaryButton>
 
 
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+            <View>
+                <Text style={styles.link2}>Don't have an account?&nbsp;
+                    <Text style={styles.link}
+                        onPress={() => navigation.navigate('register')}  //navigate to register screen
+                    >
+                        Create a new account
+                    </Text></Text>
+            </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -254,6 +171,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.color4,
+        paddingHorizontal:"5%"
     },
     imageHolder: {
         flex: 2,
@@ -276,9 +194,10 @@ const styles = StyleSheet.create({
     formgroup: {
         display: "flex",
         flexDirection: "column",
+        paddingHorizontal: 10,
         width: "100%",
+        margin: 5,
         marginVertical: 10,
-        marginHorizontal: 10,
     },
     label: {
         fontSize: 14,
@@ -299,7 +218,6 @@ const styles = StyleSheet.create({
     link: {
         color: Colors.color01,
         fontSize: 15,
-
     },
     fp: {
         display: "flex",
@@ -325,6 +243,9 @@ const styles = StyleSheet.create({
     },
     PasswordWeak: {
         color: "red"
+    },
+    buttonLogin: {
+        backgroundColor: "#ff681c"
     }
 
 

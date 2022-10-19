@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo, PureComponent } from 'react'
 import { Text, View, StyleSheet, Pressable, Image, Dimensions } from 'react-native'
 import Colors from '../Constants/Colors';
 import Iconborder from 'react-native-vector-icons/AntDesign';
@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const Post = ({ userName, ImageUri }) => {
     const screenHeight = Dimensions.get('window').height;
     return (
-        <View style={[styles.post, { height: screenHeight }]}>
+        <View style={[styles.post]}>
             <View style={styles.userDetails}>
                 <View style={styles.insideUserData}>
                     <Image
@@ -15,7 +15,7 @@ const Post = ({ userName, ImageUri }) => {
                         source={ImageUri}
                     />
                 </View>
-                <View style={styles.insideUserData}>
+                <View style={[styles.insideUserData, { marginTop: 7 }]}>
                     <Text style={styles.userName}>{userName}</Text>
                 </View>
             </View>
@@ -44,16 +44,19 @@ const Post = ({ userName, ImageUri }) => {
     )
 }
 
-export default Post;
+export default memo(Post);
+// export default Post;
+
 
 const styles = StyleSheet.create({
     post: {
-        flex: 1,
-        backgroundColor: Colors.color2,
+        display: 'flex',
+        backgroundColor: Colors.color01,
+        marginBottom: 20,
+
     },
     userDetails: {
         paddingLeft: 8,
-        // flex: 0.4,
         backgroundColor: Colors.color4,
         flexDirection: "row",
     },
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     postDataTop: {
-        flex: 1.2,
+        // flex: 1.2,
         borderColor: Colors.color1,
         borderWidth: 1,
         backgroundColor: Colors.color4,
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
     },
 
     likeCommentShare: {
-        flex:0.5,
+        // flex: 0.5,
         flexDirection: "row",
         backgroundColor: Colors.color4,
         paddingVertical: 10,
@@ -83,9 +86,10 @@ const styles = StyleSheet.create({
     userPostImage: {
         justifyContent: "center",
         alignSelf: 'center',
-        width: "100%",
-        height: "100%",
-        resizeMode: "cover"
+        width: '100%',
+        height: undefined,
+        aspectRatio: 1,
+        resizeMode: "cover",
     },
     userAvatarImage: {
         width: 40,
@@ -102,6 +106,7 @@ const styles = StyleSheet.create({
     },
     userName: {
         color: Colors.color1,
-        fontSize: 16,
+        fontSize: 17,
+        fontFamily:"RobotoCondensed-Regular"
     },
 })

@@ -8,7 +8,7 @@ const PrimaryButton = ({ children, onPress, style }) => {
                 ? [styles.innerContainer, styles.pressed, style]
                 : [styles.innerContainer, style]}
                 onPress={onPress}
-                android_ripple={style ? { color: "red" } : { color: "#000ddd" }}
+                android_ripple={style ? { color: "orange" } : { color: "#000ddd" }}
             >
                 <Text style={styles.buttonText}>{children}</Text>
             </Pressable>

@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Iconborder from 'react-native-vector-icons/AntDesign';
 import Colors from '../Constants/Colors';
 
-const BottomNavBar = () => {
+const BottomNavBar = ({ navigation, activeIcon }) => {
     // all variables 
     const [icon1Color, setIcon1Color] = useState(Colors.color4);
     const [icon2Color, setIcon2Color] = useState(Colors.color4);
@@ -40,13 +40,24 @@ const BottomNavBar = () => {
         }
     }
 
+    useEffect(() => {
+        if (activeIcon) {
+            manageColorChange(activeIcon)
+        }
+    }, [])
+
 
     return (
         <View style={styles.bottomNavBar}>
             <View>
                 <Pressable
                     style={({ pressed }) => pressed ? styles.pressed : null}
-                    onPress={() => { manageColorChange(1) }}
+                    // onPress={() => { manageColorChange(1) }}
+                    onPress={() => {
+                        manageColorChange(activeIcon)
+                        navigation.navigate('home');
+                    }
+                    }
                 >
                     <Iconborder name="home" size={25} color={icon1Color} />
                 </Pressable>
@@ -54,7 +65,11 @@ const BottomNavBar = () => {
             <View>
                 <Pressable
                     style={({ pressed }) => pressed ? styles.pressed : null}
-                    onPress={() => { manageColorChange(2) }}
+                    onPress={() => {
+                        manageColorChange(activeIcon)
+                        navigation.navigate('search');
+                    }
+                    }
                 >
                     <Iconborder name="search1" size={25} color={icon2Color} />
                 </Pressable>
@@ -62,7 +77,7 @@ const BottomNavBar = () => {
             <View>
                 <Pressable
                     style={({ pressed }) => pressed ? styles.pressed : null}
-                    onPress={() => { manageColorChange(3) }}
+                    onPress={() => { manageColorChange(activeIcon) }}
                 >
                     <Iconborder name="pluscircleo" size={25} color={icon3Color} />
                 </Pressable>
@@ -70,7 +85,11 @@ const BottomNavBar = () => {
             <View>
                 <Pressable
                     style={({ pressed }) => pressed ? styles.pressed : null}
-                    onPress={() => { manageColorChange(4) }}
+                    onPress={() => {
+                        manageColorChange(4)
+                        navigation.navigate('follow');
+                    }
+                    }
                 >
                     <Iconborder name="hearto" size={25} color={icon4Color} />
                 </Pressable>
@@ -78,7 +97,11 @@ const BottomNavBar = () => {
             <View>
                 <Pressable
                     style={({ pressed }) => pressed ? styles.pressed : null}
-                    onPress={() => { manageColorChange(5) }}
+                    onPress={() => {
+                        manageColorChange(activeIcon)
+                        navigation.navigate('profile');
+                    }
+                    }
                 >
                     <Icon name="user-circle" size={25} color={icon5Color} />
                 </Pressable>

@@ -1,39 +1,86 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { View, StyleSheet, Text, TextInput, SafeAreaView, KeyboardAvoidingView, Dimensions, Animated } from 'react-native'
+import { View, StyleSheet, Text, TextInput, SafeAreaView, KeyboardAvoidingView, Dimensions, Animated, Easing, Image } from 'react-native'
 import Colors from "../../Constants/Colors"
 import LoginImage from "../../assets/images/SVGImages/LoginGirl.svg"
 import { head1, head2, button1 } from "../../CommonStyling/Common"
 import PrimaryButton from '../../Components/PrimaryButton'
 
 const Login = ({ navigation }) => {
-
     // calculating screen width and height
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
-    const fadeAnim = useRef(new Animated.Value(0)).current;
 
-    const fadeIn = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 3500,
-            useNativeDriver: false,
-        }).start();
-    };
-
-    const fadeOut = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 0,
-            duration: 1000,
-            useNativeDriver: false,
-        }).start();
-    };
-
-
-    const [showHideImg, toggleshowHideImg] = useState(true);       //showHideImg is used to  toggle image when form focused 
+    // all varable declaration start
+    const [imgwidth, setImgWidth] = useState(windowWidth * 0.2);
+    const [imgHeight, setimgHeight] = useState(windowHeight * 0.2);
     const [email, setEmail] = useState('');
     const [emailValidError, setEmailValidError] = useState('');
     const [password, setPassword] = useState('');
     const [passwordValidError, setpasswordValidError] = useState('');
+    // all varable declaration end
+
+
+
+
+    // Animated image and form using this
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const imageContainer = useRef(new Animated.Value(0.5)).current;
+    const translation = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+    const translationimg = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+
+
+
+    const fadeInImageWithScaleHide = () => {
+
+        Animated.parallel([
+            Animated.timing(imageContainer, {
+                toValue: 0,
+                duration: 500,
+                useNativeDriver: true
+            }),
+            Animated.timing(translationimg.y, {
+                toValue: 0,
+                duration: 500,
+                useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 1000,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translation.y, {
+                toValue: -20,
+                duration: 1000,
+                useNativeDriver: true,
+            })
+        ], { stopTogether: false }).start();
+    }
+
+    const fadeInImageWithScale = () => {
+        Animated.parallel([
+            Animated.timing(translationimg.y, {
+                toValue: 20,
+                duration: 1000,
+                useNativeDriver: true,
+            }),
+            Animated.timing(imageContainer, {
+                toValue: 1,
+                duration: 1000,
+                useNativeDriver: true
+            }),
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 1000,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translation.y, {
+                toValue: 10,
+                duration: 1000,
+                useNativeDriver: true,
+            })
+        ], { stopTogether: true }).start();
+    }
+
 
     //Email validation function
     const handleEmailValidation = val => {
@@ -67,35 +114,65 @@ const Login = ({ navigation }) => {
     }
 
     useEffect(() => {
-        if (showHideImg) {
-            fadeIn();
-        }
-        // setTimeout(() => fadeIn(), 100);
+        fadeInImageWithScale();
     })
-
-    useEffect(() => {
-        if (!showHideImg) {
-            fadeOut();
-        }
-    })
-
 
 
     return (
         <SafeAreaView style={styles.container}>
-            {showHideImg ?
+            <Animated.View
+                style={{
+                    flex: 2,
+                    maxHeight: "50%",
+                    maxWidth: "100%",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    zIndex: -1,
+                    opacity: fadeAnim,
+                    transform: [
+                        { translateX: translationimg.x },
+                        { translateY: translationimg.y },
+                    ]
+                }
+                }
+            >
                 <Animated.View
-                    style={
-                        [styles.imageHolder, { opacity: fadeAnim }]
-                    }
+                    style={{
+                        transform: [
+                            { scaleX: imageContainer },
+                            { scaleY: imageContainer }
+                        ]
+                    }}
                 >
-                    <LoginImage width={windowWidth * 0.8} height={windowHeight * 0.4} />
+                    <LoginImage height={windowWidth * 0.8} width={windowHeight * 0.4} />
                 </Animated.View>
-                : null}
+                {/* <Image
+                    source={require("../../assets/images/SVGImages/LoginGirl.svg")}
+                    style={{ maxHeight: 50, maxWidth: 50 }}
+                /> */}
+            </Animated.View>
             <KeyboardAvoidingView
                 behavior='height'
+                keyboardVerticalOffset={-200}
             >
-                <View style={styles.s2}>
+
+
+                <Animated.View
+                    style={{
+                        display: "flex",
+                        zIndex: -1,
+                        width: "100%",
+                        height: "60%",
+                        borderTopLeftRadius: 30,
+                        borderTopRightRadius: 30,
+                        padding: 20,
+                        paddingTop: 10,
+                        transform: [
+                            { translateX: translation.x },
+                            { translateY: translation.y },
+                        ]
+                    }}
+                >
                     <Text style={head1}>Login</Text>
                     {emailValidError ? <Text style={[head2, { color: "red" }]}>{emailValidError}</Text> :
                         passwordValidError ? <Text style={[head2, styles.passwordMsg]}> {passwordValidError} </Text> :
@@ -109,8 +186,12 @@ const Login = ({ navigation }) => {
                             autoCorrect={false}
                             autoCapitalize="none"
                             placeholderTextColor={Colors.color3}
-                            onFocus={() => toggleshowHideImg(!showHideImg)}     //image will be hidden 
-                            onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown
+                            onFocus={() => {
+                                fadeInImageWithScaleHide();
+                                // setTimeout(() => {
+                                //     fadeInaForm();
+                                // }, 500)
+                            }}     //image will be hidden 
                             onChangeText={(value) => {
                                 setEmail(value)
                                 handleEmailValidation(email)
@@ -127,8 +208,17 @@ const Login = ({ navigation }) => {
                             value={password}
                             autoCorrect={false}
                             autoCapitalize="none"
-                            onFocus={() => toggleshowHideImg(!showHideImg)}      //image will be hidden 
-                            onBlur={() => toggleshowHideImg(!showHideImg)}      //image will be shown 
+                            onFocus={() => {
+                                fadeInImageWithScaleHide();
+                                // setTimeout(() => {
+                                //     fadeInaForm();
+                                // }, 500)
+                            }}     //image will be hidden 
+                            onBlur={() => {
+                                fadeInImageWithScale();
+                                // makeformNormal();
+
+                            }}      //image will be shown
                             onChangeText={(value) => {
                                 setPassword(value)
                                 handlePasswordValidationAlert(value)
@@ -140,9 +230,7 @@ const Login = ({ navigation }) => {
                         <Text style={styles.link}>Forgot password?</Text>
                     </View>
                     <PrimaryButton
-                    // onPress={
-                    //     () => 
-                    // }
+                        style={styles.buttonLogin}
                     >Login</PrimaryButton>
 
                     <View>
@@ -153,7 +241,9 @@ const Login = ({ navigation }) => {
                                 Create a new account
                             </Text></Text>
                     </View>
-                </View>
+                </Animated.View>
+
+
             </KeyboardAvoidingView>
         </SafeAreaView>
     )
@@ -171,7 +261,8 @@ const styles = StyleSheet.create({
         maxHeight: "50%",
         maxWidth: "100%",
         alignItems: "center",
-        justifyContent: "flex-start"
+        justifyContent: "flex-start",
+        zIndex: -1,
     },
     s2: {
         display: "flex",
@@ -235,6 +326,9 @@ const styles = StyleSheet.create({
     },
     PasswordWeak: {
         color: "red"
+    },
+    buttonLogin: {
+        backgroundColor: "#ff681c"
     }
 
 

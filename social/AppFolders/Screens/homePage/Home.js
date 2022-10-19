@@ -8,7 +8,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons'
 import Post from '../../Components/Post';
 
 
-const Home = () => {
+const Home = ({ navigation }) => {
     const [postDetails, setpostDetails] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const screenHeight = Dimensions.get('window').height;
@@ -57,14 +57,14 @@ const Home = () => {
                 </View>
                 <View style={styles.Chaticons}>
                     <Pressable
-                        style={({ pressed }) => pressed ? styles.pressed : styles.Chaticon}
+                        style={[({ pressed }) => pressed ? styles.pressed : null, styles.Chaticon]}
                     // onPress={() => { manageColorChange(2) }}
                     >
                         <Iconborder name="pluscircleo" size={25} color={Colors.color1} />
                     </Pressable>
 
                     <Pressable
-                        style={({ pressed }) => pressed ? styles.pressed : styles.Chaticon}
+                        style={[({ pressed }) => pressed ? styles.pressed : null, styles.Chaticon]}
                     // onPress={() => { manageColorChange(2) }}
                     >
                         <IonIcons name="chatbubbles-outline" size={25} color={Colors.color1} />
@@ -87,8 +87,8 @@ const Home = () => {
                     }}
                 />
             </View>
-            <View>
-                <BottomNavBar />
+            <View style={styles.BottomNavBar}>
+                <BottomNavBar navigation={navigation} activeIcon={1} />
             </View>
         </View>
     )
@@ -98,7 +98,7 @@ export default Home;
 
 const styles = StyleSheet.create({
     posts: {
-        flex: 1,
+        flex: 4,
         backgroundColor: Colors.color3,
     },
     scrollView: {
@@ -109,12 +109,15 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.color1
     },
     topBar: {
-        // flex: 0.1,
+        flex: 0.5,
         backgroundColor: Colors.color4,
         flexDirection: 'row',
         justifyContent: "space-between",
         paddingHorizontal: 5,
         paddingVertical: 8,
+    },
+    BottomNavBar: {
+        backgroundColor: Colors.color1,
     },
     logo: {
         justifyContent: 'flex-start',
