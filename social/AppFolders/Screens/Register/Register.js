@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, StyleSheet, SafeAreaView, Keyboard, Text, TextInput, Dimensions, Animated, KeyboardAvoidingView } from 'react-native'
-import RegisterImage from "../../assets/images/SVGImages/signup1.svg"
-import { button1, head1, head2 } from '../../CommonStyling/Common'
+import {
+    View, StyleSheet, SafeAreaView, Keyboard,
+    Text, TextInput, Dimensions, Animated, KeyboardAvoidingView
+} from 'react-native'
+
+import { head1, head2 } from '../../CommonStyling/Common'
 import PrimaryButton from '../../Components/PrimaryButton'
 import Colors from '../../Constants/Colors'
-import styling from '../../CommonStyling/StylingForRegisterAndLogin';
-import { IMAGE_HEIGHT, IMAGE_HEIGHT_SMALL } from "../../Constants/ScreenSizes"
 import Lottie from 'lottie-react-native';
 
 
@@ -16,8 +17,10 @@ const Register = ({ navigation }) => {
     const [emailValidError, setEmailValidError] = useState('');
     const [password, setPassword] = useState('');
     const [passwordValidError, setpasswordValidError] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [confirmPasswordValidError, setconfirmPasswordValidError] = useState('');
     const imageContainer = useRef(new Animated.Value(1.5)).current;
-   
+
 
     useEffect(() => {
         // componentWillMount 
@@ -46,6 +49,50 @@ const Register = ({ navigation }) => {
     }, [])
 
 
+    //Email validation function
+    const handleEmailValidation = val => {
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
+        if (val.length === 0) {
+            setEmailValidError('email field is empty');
+        } else if (reg.test(val) === false) {
+            setEmailValidError('enter valid email address');
+        } else if (reg.test(val) === true) {
+            setEmailValidError('');
+        }
+    };
+
+    //Password validation function
+    const handlePasswordValidationAlert = (value) => {
+        let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
+        let mediumPassword = new RegExp('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')
+        if (value.length === 0) {
+            setpasswordValidError('password field is empty');
+        } else if (strongPassword.test(value)) {
+            setpasswordValidError("password - Strong");
+            styles.passwordMsg = styles.PasswordStrong
+        } else if (mediumPassword.test(value)) {
+            setpasswordValidError("password - Medium");
+            styles.passwordMsg = styles.PasswordMedium
+
+        } else {
+            setpasswordValidError("password - Weak");
+            styles.passwordMsg = styles.PasswordWeak
+        }
+    }
+
+    //Password Match validation function
+    const handleConfirmPasswordValidation = (value) => {
+        if (password === value) {
+            setconfirmPasswordValidError(null)
+        }
+        else {
+            setconfirmPasswordValidError("Password don't match")
+        }
+    }
+
+
+
     return (
 
         <KeyboardAvoidingView
@@ -56,64 +103,35 @@ const Register = ({ navigation }) => {
                 style={{
                     width: "100%",
                     aspectRatio: imageContainer
-                    // height: () => {
-                    //     let temp = `${imageContainer}+%`
-                    //     console.debug(temp)
-                    //     console.debug(typeof temp)
-                    //     return String(imageContainer+"%")
-                    // }
                 }}
             >
                 <Lottie
                     autoPlay={true}
                     loop={true}
                     source={require('../../assets/Lottiefiles/register.json')}
-                // progress={imageContainer.current}
-                // style={{
-                //     resizeMode: 'contain',
-                //     marginBottom: 20,
-                //     padding: 10,
-                //     marginTop: 20,
-                //     // height: imageHeight,
-                // }}
                 />
             </Animated.View>
 
-
-            {/* <Animated.Image source={require("../../assets/images/Signup/registerPng.png")}
-
-                style={{
-                    resizeMode: 'contain',
-                    marginBottom: 20,
-                    padding: 10,
-                    marginTop: 20,
-                    height: imageHeight,
-                }}
-            /> */}
             <Text style={head1}>Create a new account</Text>
-            <Text style={styles.link2}>Already registered?&nbsp;
-                <Text style={styles.link}
-                    onPress={() => navigation.navigate('login')}
-                >
-                    Login here
-                </Text>
-            </Text>
+
             {emailValidError ? <Text style={[head2, { color: "red" }]}>{emailValidError}</Text> :
                 passwordValidError ? <Text style={[head2, styles.passwordMsg]}> {passwordValidError} </Text> :
-                    null}
+                    confirmPasswordValidError ? <Text style={[head2, styles.passwordMsg]}> {confirmPasswordValidError} </Text> :
+                        <Text style={styles.link2}>Already registered?&nbsp;
+                            <Text style={styles.link}
+                                onPress={() => navigation.navigate('login')}
+                            >
+                                Login here
+                            </Text>
+                        </Text>
+
+            }
 
             <View style={styles.formgroup}>
                 <Text style={styles.label}>Name</Text>
                 <TextInput style={styles.input}
                     placeholder="Enter your Name"
                     placeholderTextColor={Colors.color3}
-                // onFocus={() => {
-                //     fadeInImageWithScaleHide()
-                //     // fadeOut();
-                //     // setTimeout(() => {
-                //     //     fadeInaForm();
-                //     // }, 500)
-                // }}    //image will be hidden 
                 />
             </View>
             <View style={styles.formgroup}>
@@ -121,13 +139,19 @@ const Register = ({ navigation }) => {
                 <TextInput style={styles.input}
                     placeholder="Enter your Email"
                     placeholderTextColor={Colors.color3}
-                // onFocus={() => {
-                //     fadeInImageWithScaleHide()
-                //     // fadeOut();
-                //     // setTimeout(() => {
-                //     //     fadeInaForm();
-                //     // }, 500)
-                // }}     //image will be hidden 
+                    value={email}
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    onChangeText={(value) => {
+                        setEmail(value)
+                        handleEmailValidation(email)
+                    }}
+                    onPressIn={() => {
+                        setEmailValidError(null);
+                        setpasswordValidError(null);
+                        setconfirmPasswordValidError(null);
+                    }}      // remove error message on click 
+
                 />
             </View>
             <View style={styles.formgroup}>
@@ -135,14 +159,18 @@ const Register = ({ navigation }) => {
                 <TextInput style={styles.input} placeholder="Enter your password"
                     placeholderTextColor={Colors.color3}
                     secureTextEntry={true}
-                // onFocus={() => {
-                //     fadeInImageWithScaleHide()
-                //     // fadeOut();
-                //     // setTimeout(() => {
-                //     //     fadeInaForm();
-                //     // }, 500)
-                // }}     //image will be hidden 
-
+                    value={password}
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    onChangeText={(value) => {
+                        setPassword(value)
+                        handlePasswordValidationAlert(value)
+                    }}
+                    onPressIn={() => {
+                        setEmailValidError(null);
+                        setpasswordValidError(null);
+                        setconfirmPasswordValidError(null)
+                    }}
                 />
             </View>
             <View style={styles.formgroup}>
@@ -151,20 +179,19 @@ const Register = ({ navigation }) => {
                     placeholderTextColor={Colors.color3}
                     placeholder="Enter your password again"
                     secureTextEntry={true}
-                // onFocus={() => {
-                // fadeInImageWithScaleHide()
-                // fadeOut();
-                // setTimeout(() => {
-                //     fadeInaForm();
-                // }, 500)
-                //image will be hidden
-
-                // onBlur={() => {
-                //     fadeInImageWithScale()
-                //     // fadeIn();
-                //     // makeformNormal();
-
-                // }}    //image will be shown
+                    value={confirmPassword}
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    onChangeText={(value) => {
+                        setConfirmPassword(value)
+                        handleConfirmPasswordValidation(value)
+                    }}
+                    onPressIn={() => {
+                        setEmailValidError(null);
+                        setpasswordValidError(null);
+                        setconfirmPasswordValidError(null);
+                    }
+                    }
 
                 />
             </View>
@@ -172,7 +199,7 @@ const Register = ({ navigation }) => {
                 style={styles.buttonRegister}
                 onPress={() => navigation.navigate('home')}
             >      Register      </PrimaryButton>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
 
 
 
@@ -184,7 +211,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.color4,
-        paddingHorizontal:"5%"
+        paddingHorizontal: "5%"
     },
     imageHolder: {
         flex: 1,

@@ -53,21 +53,23 @@ const Home = ({ navigation }) => {
                     <Text
                         style={styles.logoText}
                     >Social</Text>
-                    {/* <Iconborder name="instagram" size={35} color={Colors.color4} /> */}
                 </View>
                 <View style={styles.Chaticons}>
                     <Pressable
                         style={[({ pressed }) => pressed ? styles.pressed : null, styles.Chaticon]}
                     // onPress={() => { manageColorChange(2) }}
                     >
-                        <Iconborder name="pluscircleo" size={25} color={Colors.color1} />
+                        <Iconborder name="pluscircleo" size={25} color={Colors.color1}
+                        />
                     </Pressable>
 
                     <Pressable
                         style={[({ pressed }) => pressed ? styles.pressed : null, styles.Chaticon]}
                     // onPress={() => { manageColorChange(2) }}
                     >
-                        <IonIcons name="chatbubbles-outline" size={25} color={Colors.color1} />
+                        <IonIcons name="chatbubbles-outline" size={25} color={Colors.color1}
+                            onPress={() => navigation.navigate('chats')}
+                        />
                     </Pressable>
                 </View>
             </View>

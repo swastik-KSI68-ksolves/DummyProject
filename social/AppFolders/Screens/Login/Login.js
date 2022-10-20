@@ -11,10 +11,6 @@ const Login = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
     const [emailValidError, setEmailValidError] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordValidError, setpasswordValidError] = useState('');
-    // all varable declaration end
-
     const imageContainer = useRef(new Animated.Value(1.2)).current;
 
 
@@ -58,27 +54,6 @@ const Login = ({ navigation }) => {
         }
     };
 
-    const handlePasswordValidationAlert = (value) => {
-        let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
-        let mediumPassword = new RegExp('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')
-        if (value.length === 0) {
-            setpasswordValidError('password field is empty');
-        } else if (strongPassword.test(value)) {
-            setpasswordValidError("password - Strong");
-            styles.passwordMsg = styles.PasswordStrong
-        } else if (mediumPassword.test(value)) {
-            setpasswordValidError("password - Medium");
-            styles.passwordMsg = styles.PasswordMedium
-
-        } else {
-            setpasswordValidError("password - Weak");
-            styles.passwordMsg = styles.PasswordWeak
-        }
-    }
-
-
-
-
     return (
         <KeyboardAvoidingView
             style={styles.container}
@@ -100,8 +75,7 @@ const Login = ({ navigation }) => {
 
             <Text style={head1}>Login</Text>
             {emailValidError ? <Text style={[head2, { color: "red" }]}>{emailValidError}</Text> :
-                passwordValidError ? <Text style={[head2, styles.passwordMsg]}> {passwordValidError} </Text> :
-                    <Text style={head2}>Sign in to continue</Text>}
+                <Text style={head2}>Sign in to continue</Text>}
 
             <View style={styles.formgroup}>
                 <Text style={styles.label}>Email</Text>
@@ -115,7 +89,7 @@ const Login = ({ navigation }) => {
                         setEmail(value)
                         handleEmailValidation(email)
                     }}
-                    onPressIn={() => setEmailValidError(null)}      // remove error message on click 
+                    onPressIn={() => { setEmailValidError(null) }}      // remove error message on click 
 
                 />
             </View>
@@ -124,25 +98,8 @@ const Login = ({ navigation }) => {
                 <TextInput style={styles.input} placeholder="Enter your password"
                     placeholderTextColor={Colors.color3}
                     secureTextEntry={true}
-                    value={password}
                     autoCorrect={false}
                     autoCapitalize="none"
-                    // onFocus={() => {
-                    //     fadeInImageWithScaleHide();
-                    //     // setTimeout(() => {
-                    //     //     fadeInaForm();
-                    //     // }, 500)
-                    // }}     //image will be hidden 
-                    // onBlur={() => {
-                    //     fadeInImageWithScale();
-                    //     // makeformNormal();
-
-                    // }}      //image will be shown
-                    onChangeText={(value) => {
-                        setPassword(value)
-                        handlePasswordValidationAlert(value)
-                    }}
-                    onPressIn={() => { setEmailValidError(null) }}          // remove error message on click 
                 />
             </View>
             <View style={styles.fp}>
@@ -171,7 +128,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.color4,
-        paddingHorizontal:"5%"
+        paddingHorizontal: "5%"
     },
     imageHolder: {
         flex: 2,

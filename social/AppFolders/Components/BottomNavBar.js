@@ -6,19 +6,19 @@ import Colors from '../Constants/Colors';
 
 const BottomNavBar = ({ navigation, activeIcon }) => {
     // all variables 
-    const [icon1Color, setIcon1Color] = useState(Colors.color4);
-    const [icon2Color, setIcon2Color] = useState(Colors.color4);
-    const [icon3Color, setIcon3Color] = useState(Colors.color4);
-    const [icon4Color, setIcon4Color] = useState(Colors.color4);
-    const [icon5Color, setIcon5Color] = useState(Colors.color4);
+    const [icon1Color, setIcon1Color] = useState(Colors.color1);
+    const [icon2Color, setIcon2Color] = useState(Colors.color1);
+    const [icon3Color, setIcon3Color] = useState(Colors.color1);
+    const [icon4Color, setIcon4Color] = useState(Colors.color1);
+    const [icon5Color, setIcon5Color] = useState(Colors.color1);
 
 
     const resetIconColor = () => {
-        setIcon1Color(Colors.color4);
-        setIcon2Color(Colors.color4);
-        setIcon3Color(Colors.color4);
-        setIcon4Color(Colors.color4);
-        setIcon5Color(Colors.color4);
+        setIcon1Color(Colors.color1);
+        setIcon2Color(Colors.color1);
+        setIcon3Color(Colors.color1);
+        setIcon4Color(Colors.color1);
+        setIcon5Color(Colors.color1);
     }
 
     const manageColorChange = (iconNumber) => {
@@ -79,7 +79,7 @@ const BottomNavBar = ({ navigation, activeIcon }) => {
                     style={({ pressed }) => pressed ? styles.pressed : null}
                     onPress={() => { manageColorChange(activeIcon) }}
                 >
-                    <Iconborder name="pluscircleo" size={25} color={icon3Color} />
+                    <Iconborder name="pluscircleo" size={30} color={icon3Color} />
                 </Pressable>
             </View>
             <View>
@@ -115,11 +115,13 @@ export default BottomNavBar;
 const styles = StyleSheet.create({
     bottomNavBar: {
         minwidth: '100%',
-        minHeight: 50,
+        maxHeight: 60,
         padding: 10,
-        backgroundColor: Colors.color1,
+        backgroundColor: Colors.color4,
         flexDirection: "row",
         justifyContent: "space-around",
+        borderColor:Colors.color2,
+        borderWidth:1,
     },
     pressed: {
         opacity: 0.5,

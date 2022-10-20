@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native';
-import { WelcomeScreen, Login, Register, EnterOtp, Home, Search, FollowScreen, UserProfile } from "./AppFolders/ModuleExports/index"
+import { WelcomeScreen, Login, Register, EnterOtp, Home, Search, FollowScreen, UserProfile, Chat } from "./AppFolders/ModuleExports/index"
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SplashScreen from "react-native-splash-screen"
@@ -62,6 +62,13 @@ const App = () => {
             headerShown: false
           }}
         />
+
+        <Stack.Screen name="chats" component={Chat}
+          options={{
+            headerShown: false
+          }}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   )

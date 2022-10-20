@@ -51,7 +51,7 @@ export default memo(Post);
 const styles = StyleSheet.create({
     post: {
         display: 'flex',
-        backgroundColor: Colors.color01,
+        backgroundColor: Colors.color4,
         marginBottom: 20,
 
     },
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     },
     postDataTop: {
         // flex: 1.2,
-        borderColor: Colors.color1,
+        borderColor: Colors.color3,
         borderWidth: 1,
         backgroundColor: Colors.color4,
     },

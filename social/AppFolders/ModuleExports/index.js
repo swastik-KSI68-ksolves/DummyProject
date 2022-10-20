@@ -7,7 +7,7 @@ import FollowScreen from "../Screens/FollowDetailsScreen/FollowScreen";
 import Home from "../Screens/homePage/Home";
 import Search from "../Screens/searchScreen/Search";
 import UserProfile from "../Screens/UserProfile/UserProfile";
-
+import Chat from "../Screens/ChatScreen/Chat"
 
 export {
     WelcomeScreen,
@@ -19,4 +19,5 @@ export {
     Home,
     Search,
     UserProfile,
+    Chat,
 }
