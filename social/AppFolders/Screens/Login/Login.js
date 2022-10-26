@@ -7,11 +7,16 @@ import PrimaryButton from '../../Components/PrimaryButton'
 import Lottie from 'lottie-react-native';
 import styling from '../../CommonStyling/StylingForRegisterAndLogin'
 
+
 const Login = ({ navigation }) => {
 
-    const [email, setEmail] = useState('');
-    const [emailValidError, setEmailValidError] = useState('');
     const imageContainer = useRef(new Animated.Value(1.2)).current;
+
+    const [errorMessage, setErrorMessage] = useState('')
+    const [userData, setuserData] = useState({
+        email: '',
+        password: '',
+    })
 
 
     useEffect(() => {
@@ -46,13 +51,28 @@ const Login = ({ navigation }) => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
         if (val.length === 0) {
-            setEmailValidError('email field is empty');
+            setErrorMessage('email field is empty');
         } else if (reg.test(val) === false) {
-            setEmailValidError('enter valid email address');
+            setErrorMessage('enter valid email address');
         } else if (reg.test(val) === true) {
-            setEmailValidError('');
+            setErrorMessage('');
         }
     };
+
+
+    const handleUserLogin = () => {
+        handleEmailValidation(userData.email);
+        if (userData.email == '' || userData.password == '') {
+            setErrorMessage('Fill all fields');
+        }
+        else if (userData.password < 8) {
+            setErrorMessage("Password is too short")
+        }
+        else if (errorMessage == '') {
+            setErrorMessage('login done');
+            //TODO login user with his credentials
+        }
+    }
 
     return (
         <KeyboardAvoidingView
@@ -74,22 +94,21 @@ const Login = ({ navigation }) => {
 
 
             <Text style={head1}>Login</Text>
-            {emailValidError ? <Text style={[head2, { color: "red" }]}>{emailValidError}</Text> :
+            {errorMessage ? <Text style={[head2, { color: "red" }]}>{errorMessage}</Text> :
                 <Text style={head2}>Sign in to continue</Text>}
 
             <View style={styles.formgroup}>
                 <Text style={styles.label}>Email</Text>
                 <TextInput style={styles.input}
                     placeholder="Enter your Email"
-                    value={email}
+                    value={userData.email}
                     autoCorrect={false}
                     autoCapitalize="none"
                     placeholderTextColor={Colors.color3}
                     onChangeText={(value) => {
-                        setEmail(value)
-                        handleEmailValidation(email)
+                        setuserData({ ...userData, email: value })
                     }}
-                    onPressIn={() => { setEmailValidError(null) }}      // remove error message on click 
+                    onPressIn={() => { setErrorMessage('') }}      // remove error message on click 
 
                 />
             </View>
@@ -100,6 +119,10 @@ const Login = ({ navigation }) => {
                     secureTextEntry={true}
                     autoCorrect={false}
                     autoCapitalize="none"
+                    onChangeText={(value) => {
+                        setuserData({ ...userData, password: value })
+                    }}
+                    onPressIn={() => { setErrorMessage('') }}      // remove error message on click 
                 />
             </View>
             <View style={styles.fp}>
@@ -107,6 +130,9 @@ const Login = ({ navigation }) => {
             </View>
             <PrimaryButton
                 style={styles.buttonLogin}
+                onPress={() => {
+                    handleUserLogin();
+                }}
             >      Login      </PrimaryButton>
 
 

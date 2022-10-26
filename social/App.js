@@ -4,14 +4,36 @@ import { WelcomeScreen, Login, Register, EnterOtp, Home, Search, FollowScreen, U
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SplashScreen from "react-native-splash-screen"
+// import firestore from "@react-native-firebase/firestore"
+
+
+// const users = await firestore().collection('Users').get();
+// console.debug(users)
+// console.debug(usersCollection.doc(''))
+
+
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [isVisible, setVisible] = useState(true);     // isVisible - if true show splash screen
+  // const getUserData = async () => {
+  //   const users = firestore().collection('Users').add({
+  //     email: "swastik2@gmai;.com",
+  //     name: "s2",
+  //   });
+  //   // console.debug("users = = ", users)
+  //   users.then(sd => {
+  //     console.debug('Total users: ', sd.size)
+  //     console.debug('name: ', sd.docs)
+
+  //   });
+  //   return users;
+  // }
 
   useEffect(() => {                         // show splash screen for some time 
     SplashScreen.hide()
+    // getUserData();
   }, [])
 
   return (

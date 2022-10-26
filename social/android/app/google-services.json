@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "311834618651",
+    "project_id": "socal-ea95d",
+    "storage_bucket": "socal-ea95d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311834618651:android:df800767999ec027d601be",
+        "android_client_info": {
+          "package_name": "com.social"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311834618651-7t4jtdqeuifo4u79a2ut0omlv7co0dap.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOZoG749pCg1KgFjfQyy2YfLiVdfgJOSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311834618651-7t4jtdqeuifo4u79a2ut0omlv7co0dap.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
